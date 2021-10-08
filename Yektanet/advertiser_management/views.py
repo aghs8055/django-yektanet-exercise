@@ -1,13 +1,12 @@
 from django.http import HttpResponse
 from django.template import loader
-from .models import Ad
+from .models import Advertiser
 
 
-def show(request, ad_id):
+def show(request):
     template = loader.get_template('advertiser_management/templates/advertiser_management/ads.html')
-    ad = Ad.objects.get(pk=ad_id)
+    advertisers = Advertiser.objects.all()
     context = {
-        'ad': ad,
-        'advertiser': ad.advertiser_id,
+        'advertisers': advertisers,
     }
     return HttpResponse(template.rander(context, request))
