@@ -19,7 +19,7 @@ class BaseModel(models.Model):
 
 
 class Advertiser(BaseModel):
-    name = models.CharField(max_lemgth=50)
+    name = models.CharField(max_length=50)
 
     def get_name(self):
         return self.name
@@ -32,4 +32,4 @@ class Ad(BaseModel):
     title = models.CharField(max_length=50)
     img_url = models.CharField(max_length=100)
     link = models.CharField(max_length=100)
-    advertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
+    advertiser_id = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
