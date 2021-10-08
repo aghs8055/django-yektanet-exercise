@@ -39,3 +39,11 @@ class Ad(BaseModel):
 
     def __str__(self):
         return self.title
+
+    def inc_clicks(self):
+        super().inc_clicks()
+        self.advertiser_id.inc_clicks()
+
+    def inc_views(self):
+        super().inc_views()
+        self.advertiser_id.inc_views()
