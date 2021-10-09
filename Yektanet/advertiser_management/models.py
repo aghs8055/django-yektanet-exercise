@@ -27,6 +27,10 @@ class Advertiser(BaseModel):
     def set_name(self, name):
         self.name = name
 
+    @staticmethod
+    def get_total_clicks():
+        return sum([advertiser.clicks for advertiser in Advertiser.objects.all()])
+
     def __str__(self):
         return self.name
 
