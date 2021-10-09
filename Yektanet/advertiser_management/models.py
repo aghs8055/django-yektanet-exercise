@@ -17,6 +17,9 @@ class BaseModel(models.Model):
     def inc_views(self):
         self.views += 1
 
+    class Meta:
+        abstract = True
+
 
 class Advertiser(BaseModel):
     name = models.CharField(max_length=50)
