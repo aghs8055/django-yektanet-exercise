@@ -7,14 +7,14 @@ from .forms import AdForm
 
 def show(request):
     advertisers = Advertiser.objects.all()
-    for i in advertisers:
-        i.inc_views()
-        i.save()
-        i.ads = i.ad_set.all()
-        for j in i.ads:
-            j.inc_views()
-            j.save()
-            j.advertiser_id.save()
+    for advertiser in advertisers:
+        advertiser.inc_views()
+        advertiser.save()
+        advertiser.ads = advertiser.ad_set.all()
+        for ad in advertiser.ads:
+            ad.inc_views()
+            ad.save()
+            ad.advertiser_id.save()
     context = {
         'advertisers': advertisers,
     }
