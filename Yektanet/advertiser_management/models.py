@@ -26,14 +26,14 @@ class Ad(models.Model):
 
 class BaseModel(models.Model):
     ad_id = models.ForeignKey(Ad, on_delete=models.CASCADE)
-    date = models.DateTimeField()
+    datetime = models.DateTimeField()
     ip = models.GenericIPAddressField()
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return self.ad_id
+        return self.ad_id.__str__()
 
 
 class Click(BaseModel):
