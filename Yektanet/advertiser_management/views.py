@@ -1,20 +1,17 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Advertiser, Ad
+from .models import *
 from django.shortcuts import render, redirect
 from .forms import AdForm
+from django.utils import timezone
 
 
 def show(request):
     advertisers = Advertiser.objects.all()
     for advertiser in advertisers:
-        advertiser.inc_views()
-        advertiser.save()
         advertiser.ads = advertiser.ad_set.all()
         for ad in advertiser.ads:
-            ad.inc_views()
-            ad.save()
-            ad.advertiser_id.save()
+            View(ad_id=ad, datetime=timezone.now(), ip=request.META['REMOTE_ADDR']).save()
     context = {
         'advertisers': advertisers,
     }
@@ -43,7 +40,5 @@ def advertise(request):
 
 def click(request, ad_id):
     ad = Ad.objects.get(pk=ad_id)
-    ad.inc_clicks()
-    ad.save()
-    ad.advertiser_id.save()
+    Click(ad_id=ad, datetime=timezone.now(), ip=request.META['REMOTE_ADDR']).save()
     return redirect(ad.link)
