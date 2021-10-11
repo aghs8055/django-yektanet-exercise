@@ -15,6 +15,7 @@ class Advertiser(models.Model):
 
 
 class Ad(models.Model):
+    approve = models.BooleanField(default=False)
     title = models.CharField(max_length=50)
     img_url = models.CharField(max_length=100)
     link = models.CharField(max_length=100)
