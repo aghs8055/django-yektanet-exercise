@@ -18,7 +18,7 @@ reject.short_description = 'Reject selected ads'
 class AdAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('approve',)
-    list_display = ('title', 'approve')
+    list_display = ('title', 'approve', 'advertiser_id')
     actions = [approve, reject]
 
 
