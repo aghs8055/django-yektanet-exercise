@@ -1,0 +1,27 @@
+<p>Sum of clicks and views</p>
+<hr>
+{% for key, value in total.items %}
+    <p>{{ key.title }}:</p>
+    {% for s, e, t in value %}
+        {% if t %}
+            <p>{{ s }}:00 - {{ e }}:00 : {{ t }}</p>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+<hr>
+<hr><br>
+<p>Click rate</p>
+<hr>
+{% for key, value in rate.items %}
+    <p>{{ key.title }}:</p>
+    {% for s, e, t in value %}
+        {% if t %}
+            <p>{{ s }}:00 - {{ e }}:00 : {{ t }}</p>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+<hr>
+<hr><br>
+<p>Click daley: {{ click_delay }} seconds</p>
+<hr>
+<hr><br>
