@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rest_framework',
+    'rest_framework.authtoken',
     'advertiser_management.apps.AdvertiserManagementConfig',
     'django.contrib.admin',
     'django.contrib.auth',

@@ -4,6 +4,8 @@ from . import serializers
 from rest_framework.response import Response
 from advertiser_management.models import *
 import advertiser_management
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 
 class AdView(generics.ListAPIView):
@@ -17,6 +19,8 @@ class AdView(generics.ListAPIView):
 
 
 class CreateAdView(generics.CreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = serializers.AdSerializer
 
 
@@ -25,10 +29,13 @@ class CreateClickView(generics.CreateAPIView):
 
 
 class ReportView(views.APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAdminUser]
+
     def get(self, request):
         context = advertiser_management.views.ReportView().get_context_data()
         ads = Ad.objects.all()
-        response = {'ad_'+str(ad.id): {
+        response = {'ad_' + str(ad.id): {
             'total_clicks_views': context['total'][ad],
             'click_rate': context['rate'][ad],
             'click_delay': context['click_delay']
