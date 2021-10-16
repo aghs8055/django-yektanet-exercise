@@ -1,9 +1,7 @@
 from .models import *
 from django.utils import timezone
-from django.views.generic import TemplateView, RedirectView, DetailView
+from django.views.generic import TemplateView, RedirectView
 from django.views.generic.edit import CreateView
-from django.db.models import *
-from datetime import datetime
 
 
 class ShowAdsView(TemplateView):
@@ -66,7 +64,7 @@ class ReportView(TemplateView):
                 click_times.append(click.datetime.timestamp())
             if len(click_times) != 0:
                 click_time += sum(click_times) / len(click_times)
-                view_count +=1
+                view_count += 1
             else:
                 view_time -= view.datetime.timestamp()
         if len(views) != 0:
