@@ -6,6 +6,7 @@ from advertiser_management.models import *
 import advertiser_management
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from django.utils import timezone
 
 
 class AdView(generics.ListAPIView):
