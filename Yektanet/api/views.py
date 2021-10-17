@@ -15,7 +15,7 @@ class AdView(generics.ListAPIView):
     def get_queryset(self):
         ads = Ad.objects.filter(approve=True)
         for ad in ads:
-            View(ad_id=ad, datetime=timezone.now(), ip=self.request.META['REMOTE_ADDR'])
+            View(ad_id=ad, datetime=timezone.now(), ip=self.request.META.get('REMOTE_ADDR', None)).save()
         return ads
 
 
