@@ -34,12 +34,11 @@ class ReportView(views.APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request):
-        context = advertiser_management.views.ReportView().get_context_data()
+        report = advertiser_management.utils.get_report()
         ads = Ad.objects.all()
         response = {'ad_' + str(ad.id): {
-            'total_clicks_views': context['total'][ad],
-            'click_rate': context['rate'][ad],
-            'click_delay': context['click_delay']
+            'total_clicks_views': report['total_clicks_views'][ad],
+            'click_rate': report['click_rate'][ad]
         } for ad in ads}
-        response['click_delay'] = context['click_delay']
+        response['click_delay'] = report['click_delay']
         return Response(response)
