@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from .celery import app
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,7 +82,16 @@ WSGI_APPLICATION = 'Yektanet.wsgi.application'
 
 CELERY_BROKER_URL = 'amqp://localhost'
 
-CELERY_BEAT_SCHEDULE = {}
+CELERY_BEAT_SCHEDULE = {
+    'create_hourly_report': {
+        'task': 'celery_app.task.create_hourly_report',
+        'schedule': crontab(minute=0, hour='*/1')
+    },
+    'create_daily_report': {
+        'task': 'celery_app.task.create_daily_report',
+        'schedule': crontab(minute=0, hour=0)
+    }
+}
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
