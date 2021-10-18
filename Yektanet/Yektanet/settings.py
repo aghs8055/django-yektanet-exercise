@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'rest_framework',
     'django_celery_beat',
-    'celery.apps.CeleryAppConfig'
+    'celery_app.apps.CeleryAppConfig',
     'rest_framework.authtoken',
     'advertiser_management.apps.AdvertiserManagementConfig',
     'django.contrib.admin',
