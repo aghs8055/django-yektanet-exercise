@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from .celery import app
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,6 +31,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rest_framework',
+    'django_celery_beat',
+    'celery.apps.CeleryAppConfig'
     'rest_framework.authtoken',
     'advertiser_management.apps.AdvertiserManagementConfig',
     'django.contrib.admin',
@@ -76,6 +79,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Yektanet.wsgi.application'
 
+CELERY_BROKER_URL = 'amqp://localhost'
+
+CELERY_BEAT_SCHEDULE = {}
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -111,11 +117,15 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Tehran'
 
+CELERY_TIMEZONE = 'Asia/Tehran'
+
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
+
+app.conf.enable_utc = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
