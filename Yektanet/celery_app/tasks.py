@@ -1,34 +1,38 @@
 from celery import task
-from advertiser_management import Ad
-from django.db.models import Count, Q
+from advertiser_management.models import Ad
+from django.db.models import Count, Q, Sum
+from .models import *
 from django.utils import timezone
-
-hourly_reports = []
-daily_reports = []
 
 
 @task
 def create_hourly_report():
-    global hourly_reports
-    hourly_report = Ad.objects.all().annotate(
-        clicks=Count('click', filter=Q(click__datetime__hour=timezone.now().hour - 1)))
-    hourly_report = hourly_report.annotate(views=Count('click', filter=Q(view__datetime__hour=timezone.now().hour - 1)))
-    hourly_reports.append(hourly_report)
-    return hourly_report
+    hour_report = []
+    date = timezone.now() - timezone.timedelta(hours=1)
+    year, month, day, hour = date.year, date.month, date.day, date.hour
+    ads = Ad.objects.all().annotate(clicks=Count('click', filter=Q(click__datetime__year=year) and Q(
+        click__datetime__month=month) and Q(click__datetime__day=day) and Q(click__datetime__hour=hour)))
+    ads = ads.annotate(views=Count('click', filter=Q(view__datetime__year=year) and Q(
+        view__datetime__month=month) and Q(view__datetime__day=day) and Q(view__datetime__hour=hour)))
+    for ad in ads:
+        ad_report = HourReport(clicks=ad.clicks, views=ad.views, ad=ad)
+        ad_report.save()
+        hour_report.append(ad_report)
+    return hour_report
 
 
 @task
 def create_daily_report():
-    global hourly_reports
-    global daily_reports
-    daily_report = {ad: {'clicks': 0, 'views': 0} for ad in Ad.objects.all()}
-    if len(hourly_reports) >= 24:
-        last_hours = hourly_reports[-24:]
-    else:
-        last_hours = hourly_reports
-    for ad in Ad.objects.all():
-        for hour in last_hours:
-            daily_report[ad]['clicks'] += hour.get(pk=ad.pk).clicks
-            daily_report[ad]['vies'] += hour.get(pk=ad.pk).views
-    daily_reports.append(daily_report)
-    return daily_report
+    day_report = []
+    date = timezone.now() - timezone.timedelta(days=1)
+    year, month, day, hour = date.year, date.month, date.day, date.hour
+    ads = Ad.objects.all()
+    for ad in ads:
+        clicks = HourReport.objects.filter(ad=ad, year=year, month=month, day=day).aggregate(Sum('clicks'))[
+            'clicks__sum']
+        views = HourReport.objects.filter(ad=ad, year=year, month=month, day=day).aggregate(Sum('views'))[
+            'views__sum']
+        ad_report = DayReport(ad=ad, clicks=clicks, views=views)
+        ad_report.save()
+        day_report.append(ad_report)
+    return day_report
