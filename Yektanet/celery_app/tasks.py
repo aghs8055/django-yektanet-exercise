@@ -1,11 +1,11 @@
-from celery import task
+from celery import shared_task
 from advertiser_management.models import Ad
 from django.db.models import Count, Q, Sum
 from .models import *
 from django.utils import timezone
 
 
-@task
+@shared_task
 def create_hourly_report():
     hour_report = []
     date = timezone.now() - timezone.timedelta(hours=1)
@@ -21,7 +21,7 @@ def create_hourly_report():
     return hour_report
 
 
-@task
+@shared_task
 def create_daily_report():
     day_report = []
     date = timezone.now() - timezone.timedelta(days=1)
