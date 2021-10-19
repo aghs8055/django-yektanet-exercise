@@ -5,8 +5,9 @@ from .models import *
 from django.utils import timezone
 
 
-@shared_task
+@shared_task(name='hourly_report')
 def create_hourly_report():
+    print(2)
     hour_report = []
     date = timezone.now() - timezone.timedelta(hours=1)
     year, month, day, hour = date.year, date.month, date.day, date.hour
@@ -21,8 +22,9 @@ def create_hourly_report():
     return hour_report
 
 
-@shared_task
+@shared_task(name='daily_report')
 def create_daily_report():
+    print(1)
     day_report = []
     date = timezone.now() - timezone.timedelta(days=1)
     year, month, day, hour = date.year, date.month, date.day, date.hour
@@ -36,3 +38,4 @@ def create_daily_report():
         ad_report.save()
         day_report.append(ad_report)
     return day_report
+
