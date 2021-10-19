@@ -38,4 +38,3 @@ def create_daily_report():
         ad_report.save()
         day_report.append(ad_report)
     return day_report
-
