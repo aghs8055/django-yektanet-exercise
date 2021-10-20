@@ -16,7 +16,7 @@ def create_hourly_report():
     ads = ads.annotate(views=Count('click', filter=Q(view__datetime__year=year) and Q(
         view__datetime__month=month) and Q(view__datetime__day=day) and Q(view__datetime__hour=hour)))
     for ad in ads:
-        ad_report = HourReport(clicks=ad.clicks, views=ad.views, ad=ad)
+        ad_report = HourReport(clicks=ad.clicks, views=ad.views, ad=ad, year=year, month=month, day=day, hour=hour)
         ad_report.save()
         hour_report.append(ad_report)
     return hour_report
@@ -34,7 +34,7 @@ def create_daily_report():
             'clicks__sum']
         views = HourReport.objects.filter(ad=ad, year=year, month=month, day=day).aggregate(Sum('views'))[
             'views__sum']
-        ad_report = DayReport(ad=ad, clicks=clicks, views=views)
+        ad_report = DayReport(ad=ad, clicks=clicks, views=views, year=year, month=month, day=day)
         ad_report.save()
         day_report.append(ad_report)
     return day_report
